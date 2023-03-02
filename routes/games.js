@@ -22,7 +22,7 @@ router.get("/games", async (req, res) => {
       `https://api.rawg.io/api/games?key=${apiKey}&search=${search}&page=${page}`
     );
 
-    console.log(response);
+    console.log(response.data);
     res.status(200).json(response.data);
   } catch (error) {
     res.status(400).json(error.message);
@@ -44,7 +44,10 @@ router.get("/games/:id", async (req, res) => {
         `https://api.rawg.io/api/games/${id}?key=${apiKey}`
       );
       console.log(req.params, "after requete");
-      console.log(response, "response");
+      console.log(
+        response.data,
+        "------------😀-------------response.data-gamesid"
+      );
       res.status(200).json(response.data);
     } catch (error) {
       res.status(400).json(error.message);
