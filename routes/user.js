@@ -8,7 +8,7 @@ const User = require("../models/User");
 
 router.post("/user/signup", async (req, res) => {
   try {
-    const { username, email, password } = req.body;
+    const { username, email, password, passwordConf } = req.body;
 
     if (!username || !email || !password) {
       return res.status(400).json({ message: "Missing parameter" });
@@ -27,6 +27,11 @@ router.post("/user/signup", async (req, res) => {
 
     if (usernameAlreadyUsed) {
       return res.status(409).json({ message: "This username is already used" });
+    }
+
+    //test avec password à entrer 2 fois pour valider l'inscription
+    if (password !== passwordConf) {
+      return res.status(409).json({ message: "Passwords are different" });
     }
 
     const token = uid2(64);
@@ -65,7 +70,7 @@ router.post("/user/login", async (req, res) => {
     }
 
     const newHash = SHA256(user.salt + password).toString(encBase64);
-    console.log(newHash);
+    // console.log(newHash);
 
     if (newHash !== user.hash) {
       return res.status(401).json({ message: "Wrong password" });
