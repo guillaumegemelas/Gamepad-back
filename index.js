@@ -25,6 +25,10 @@ app.use(gamesRoutes);
 const userRoutes = require("./routes/user");
 app.use(userRoutes);
 
+//ROUTE Favoris
+const userFavourites = require("./routes/favourites");
+app.use(userFavourites);
+
 app.all("*", (req, res) => {
   res.status(404).json({ message: "This routes doesn't exist" });
 });
