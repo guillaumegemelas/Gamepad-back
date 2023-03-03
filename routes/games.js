@@ -8,7 +8,7 @@ const axios = require("axios");
 
 router.get("/games", async (req, res) => {
   const apiKey = process.env.YOUR_API_KEY;
-  const { search, page, value } = req.query;
+  let { search, page, value } = req.query;
 
   if (!search) {
     search = "";
