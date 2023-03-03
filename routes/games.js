@@ -8,7 +8,7 @@ const axios = require("axios");
 
 router.get("/games", async (req, res) => {
   const apiKey = process.env.YOUR_API_KEY;
-  let { search, page, value } = req.query;
+  let { search, page, value, platforms, genres } = req.query;
 
   if (!search) {
     search = "";
@@ -20,10 +20,27 @@ router.get("/games", async (req, res) => {
     value = "";
   }
 
+  let response;
+
+  //modif: 2 requetes par rapport au tri par plateforme au niveau du front: si platform non renseigné, au chgment de la page, 0 resultats...
   try {
-    const response = await axios.get(
-      `https://api.rawg.io/api/games?key=${apiKey}&search=${search}&page=${page}&ordering=${value}`
-    );
+    if (platforms && genres) {
+      response = await axios.get(
+        `https://api.rawg.io/api/games?key=${apiKey}&search=${search}&page=${page}&ordering=${value}&platforms=${platforms}&genres=${genres}`
+      );
+    } else if (platforms && !genres) {
+      response = await axios.get(
+        `https://api.rawg.io/api/games?key=${apiKey}&search=${search}&page=${page}&ordering=${value}&platforms=${platforms}`
+      );
+    } else if (!platforms && genres) {
+      response = await axios.get(
+        `https://api.rawg.io/api/games?key=${apiKey}&search=${search}&page=${page}&ordering=${value}&genres=${genres}`
+      );
+    } else {
+      response = await axios.get(
+        `https://api.rawg.io/api/games?key=${apiKey}&search=${search}&page=${page}&ordering=${value}`
+      );
+    }
 
     console.log(response.data);
     res.status(200).json(response.data);
