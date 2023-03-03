@@ -8,7 +8,7 @@ const axios = require("axios");
 
 router.get("/games", async (req, res) => {
   const apiKey = process.env.YOUR_API_KEY;
-  let { search, page } = req.query;
+  const { search, page, value } = req.query;
 
   if (!search) {
     search = "";
@@ -16,10 +16,13 @@ router.get("/games", async (req, res) => {
   if (!page) {
     page = 1;
   }
+  if (!value) {
+    value = "";
+  }
 
   try {
     const response = await axios.get(
-      `https://api.rawg.io/api/games?key=${apiKey}&search=${search}&page=${page}`
+      `https://api.rawg.io/api/games?key=${apiKey}&search=${search}&page=${page}&ordering=${value}`
     );
 
     console.log(response.data);
