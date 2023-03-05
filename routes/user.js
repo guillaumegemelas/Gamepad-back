@@ -81,4 +81,17 @@ router.post("/user/login", async (req, res) => {
   }
 });
 
+//test route en get récup user------------------------
+
+router.get("/user", async (req, res) => {
+  try {
+    const users = await User.find();
+    res.json({ users: users });
+  } catch (error) {
+    console.log(error.message);
+    res.status(400).json({ message: error.message });
+  }
+});
+//--------------------------------------------------
+
 module.exports = router;
