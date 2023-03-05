@@ -5,6 +5,7 @@ const Review = mongoose.model("Review", {
   title: String,
   description: String,
   token: String,
+  name: String,
 });
 
 module.exports = Review;

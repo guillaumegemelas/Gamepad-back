@@ -30,8 +30,8 @@ const userFavourites = require("./routes/favourites");
 app.use(userFavourites);
 
 //ROUTE Review
-// const userReviews = require("./routes/review");
-// app.use(userReviews);
+const userReviews = require("./routes/review");
+app.use(userReviews);
 
 app.all("*", (req, res) => {
   res.status(404).json({ message: "This routes doesn't exist" });
