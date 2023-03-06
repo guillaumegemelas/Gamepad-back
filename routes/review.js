@@ -5,14 +5,10 @@ const Review = require("../models/Review");
 
 //route 1 pour ajouter des review en post++++++++++++++++++++++++++
 
-router.post("/addreview/:name", async (req, res) => {
+router.post("/addreview", async (req, res) => {
   // router.post("/addreview/:name, async (req, res) => {
   //si l'id ne fonctionne pas, il va falloir passer par le nom du jeu comme les favoris
 
-  //test avec params.id pour récupérer id du jeu
-  //   const name = req.params.name;
-  //   console.log(req.params);
-  //   console.log(name);
   try {
     const { title, description, token, name } = req.body;
 
@@ -45,6 +41,8 @@ router.post("/addreview/:name", async (req, res) => {
 
 router.get("/review", async (req, res) => {
   try {
+    const reviews = await Review.find();
+    res.json({ reviews: reviews });
   } catch (error) {
     console.log(error.message);
     res.status(400).json({ message: error.message });
