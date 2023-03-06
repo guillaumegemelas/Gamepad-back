@@ -21,6 +21,13 @@ router.post("/addreview", async (req, res) => {
     });
 
     //il faudra vérifier que un user ne peut poster qu'une seule review par jeu
+    const newReviewAlreadyAdded = await Review.findOne({ name, token });
+
+    if (newReviewAlreadyAdded) {
+      return res
+        .status(409)
+        .json({ message: "you have already added a review for this game" });
+    }
 
     await newReview.save();
 
