@@ -29,6 +29,10 @@ router.post("/addreview", async (req, res) => {
         .status(409)
         .json({ message: "you have already added a review for this game" });
     }
+    // pour initier le compteur à 0
+    if (!count) {
+      newReview.count = 0;
+    }
 
     await newReview.save();
 
@@ -68,7 +72,10 @@ router.put("/review/update1/:id", async (req, res) => {
     reviewToUpdate.count = reviewToUpdate.count + 1;
 
     await reviewToUpdate.save();
-    res.status(200).json("Reviews rate modified succesfully !");
+    //pour mise à jour du front: le back doit renvoyer le tableau mis à jour
+    const reviews = await Review.find();
+    res.json({ reviews: reviews });
+    // res.status(200).json("Reviews rate modified succesfully !");
   } catch (error) {
     console.log(error.message);
     res.status(400).json({ message: error.message });
@@ -82,7 +89,12 @@ router.put("/review/update2/:id", async (req, res) => {
     reviewToUpdate.count = reviewToUpdate.count - 1;
 
     await reviewToUpdate.save();
-    res.status(200).json("Reviews rate modified succesfully !");
+    //pour mise à jour du front: le back doit renvoyer le tableau mis à jour: sur game en front, dans button,
+    //setReviews aura pour valeur le retour de la reponse json ci dessous.
+    const reviews = await Review.find();
+    res.json({ reviews: reviews });
+    //
+    // res.status(200).json("Reviews rate modified succesfully !");
   } catch (error) {
     console.log(error.message);
     res.status(400).json({ message: error.message });
