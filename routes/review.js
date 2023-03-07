@@ -59,15 +59,14 @@ router.get("/review", async (req, res) => {
 });
 
 //route 3 pour modifier Review?**********************************
-// ajout count dans modèle review et fonctionne avec postman en test localhost
+// ajout count dans modèle review et fonctionne avec postman en
 
 router.put("/review/update/:id", async (req, res) => {
   const reviewToUpdate = await Review.findById(req.params.id);
   console.log(reviewToUpdate);
   try {
-    if (req.body.count) {
-      reviewToUpdate.count = req.body.count;
-    }
+    reviewToUpdate.count = reviewToUpdate.count + 1;
+
     await reviewToUpdate.save();
     res.status(200).json("Reviews rate modified succesfully !");
   } catch (error) {
