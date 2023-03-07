@@ -10,7 +10,7 @@ router.post("/addreview", async (req, res) => {
   //si l'id ne fonctionne pas, il va falloir passer par le nom du jeu comme les favoris
 
   try {
-    const { title, description, token, name } = req.body;
+    const { title, description, token, name, count } = req.body;
 
     //déclaration nouvel review
     const newReview = new Review({
@@ -18,6 +18,7 @@ router.post("/addreview", async (req, res) => {
       description: description,
       token: token,
       name: name,
+      count: count,
     });
 
     //il faudra vérifier que un user ne peut poster qu'une seule review par jeu
@@ -36,6 +37,7 @@ router.post("/addreview", async (req, res) => {
       description: newReview.description,
       id: newReview.id,
       name: newReview.name,
+      count: newReview.count,
     };
     res.status(200).json(clientResponse);
   } catch (error) {
@@ -56,6 +58,22 @@ router.get("/review", async (req, res) => {
   }
 });
 
-//route 3 pour modifier favoris?**********************************
+//route 3 pour modifier Review?**********************************
+// ajout count dans modèle review et fonctionne avec postman en test localhost
+
+router.put("/review/update/:id", async (req, res) => {
+  const reviewToUpdate = await Review.findById(req.params.id);
+  console.log(reviewToUpdate);
+  try {
+    if (req.body.count) {
+      reviewToUpdate.count = req.body.count;
+    }
+    await reviewToUpdate.save();
+    res.status(200).json("Reviews rate modified succesfully !");
+  } catch (error) {
+    console.log(error.message);
+    res.status(400).json({ message: error.message });
+  }
+});
 
 module.exports = router;
