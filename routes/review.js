@@ -61,11 +61,25 @@ router.get("/review", async (req, res) => {
 //route 3 pour modifier Review?**********************************
 // ajout count dans modèle review et fonctionne avec postman en
 
-router.put("/review/update/:id", async (req, res) => {
+router.put("/review/update1/:id", async (req, res) => {
   const reviewToUpdate = await Review.findById(req.params.id);
   console.log(reviewToUpdate);
   try {
     reviewToUpdate.count = reviewToUpdate.count + 1;
+
+    await reviewToUpdate.save();
+    res.status(200).json("Reviews rate modified succesfully !");
+  } catch (error) {
+    console.log(error.message);
+    res.status(400).json({ message: error.message });
+  }
+});
+
+router.put("/review/update2/:id", async (req, res) => {
+  const reviewToUpdate = await Review.findById(req.params.id);
+  console.log(reviewToUpdate);
+  try {
+    reviewToUpdate.count = reviewToUpdate.count - 1;
 
     await reviewToUpdate.save();
     res.status(200).json("Reviews rate modified succesfully !");
