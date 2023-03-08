@@ -6,6 +6,9 @@ const User = mongoose.model("User", {
   token: String,
   hash: String,
   salt: String,
+  //test ajout avatar pour comprendre cloudinary------------------------
+  picture: Object,
+  //--------------------------------------------------------------------
 });
 
 module.exports = User;

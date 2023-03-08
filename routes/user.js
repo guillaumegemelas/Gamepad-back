@@ -1,4 +1,11 @@
 const express = require("express");
+
+//test ajout fileUpload() pour  comprendre mécanisme Coulinary----------------------------
+const fileUpload = require("express-fileupload");
+const convertToBase64 = require("../utils/convertToBase64");
+const cloudinary = require("cloudinary").v2;
+//----------------------------------------------------------------------------------------
+
 const uid2 = require("uid2");
 const SHA256 = require("crypto-js/sha256");
 const encBase64 = require("crypto-js/enc-base64");
@@ -6,9 +13,10 @@ const router = express.Router();
 
 const User = require("../models/User");
 
-router.post("/user/signup", async (req, res) => {
+router.post("/user/signup", fileUpload(), async (req, res) => {
   try {
     const { username, email, password, passwordConf } = req.body;
+    const { picture } = req.files.picture;
 
     if (!username || !email || !password) {
       return res.status(400).json({ message: "Missing parameter" });
@@ -21,7 +29,7 @@ router.post("/user/signup", async (req, res) => {
       return res.status(409).json({ message: "This email is already used" });
     }
 
-    //renvoie de mesage d'erreur si l'username existe dejà en base de données----
+    //renvoie de message d'erreur si l'username existe dejà en base de données----
 
     const usernameAlreadyUsed = await User.findOne({ username });
 
@@ -44,7 +52,20 @@ router.post("/user/signup", async (req, res) => {
       token,
       hash,
       salt,
+      //ajout avatar pour image Cloudinary----------------------------------------
+      picture,
+      //--------------------------------------------------------------------------
     });
+
+    //test envoi image à Cloudinary-----------------------------------------------
+    const result = await cloudinary.uploader.upload(
+      convertToBase64(req.files.picture),
+      {
+        folder: `gamepad/users/${newUser._id}`,
+      }
+    );
+    newUser.picture = result;
+    //----------------------------------------------------------------------------
 
     await newUser.save();
     const response = {
