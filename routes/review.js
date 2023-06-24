@@ -6,7 +6,7 @@ const Review = require("../models/Review");
 // Import du middleware isAuthenticated
 const isAuthenticated = require("../middlewares/isAuthenticated");
 
-//route 1 pour ajouter des review en post++++++++++++++++++++++++++
+//route 1 pour ajouter des review en post+++++++++++++++++++++++++++++
 
 router.post("/addreview", isAuthenticated, async (req, res) => {
   // router.post("/addreview/:name, async (req, res) => {
